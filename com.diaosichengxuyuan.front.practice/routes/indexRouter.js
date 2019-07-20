@@ -25,4 +25,8 @@ router.get('/12306Vue', function (req, res, next) {
     res.render('12306Vue.htm');
 });
 
+router.get('/leecode', function (req, res, next) {
+    res.render('leecode.htm');
+});
+
 module.exports = router;
