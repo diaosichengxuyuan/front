@@ -1,22 +1,38 @@
 class NumberUtil {
     constructor() { }
 
-    bigNumberAdd = function (a, b) {
-        var res = '',
-            temp = 0;
-        a = a.split('');
-        b = b.split('');
-        while (a.length || b.length || temp) {
-            temp += ~~a.pop() + ~~b.pop();
-            res = (temp % 10) + res;
-            temp = temp > 9;
+    add = function (number1, number2) {
+        let result = "";
+        //进位
+        let carry = 0;
+
+        for (let index1 = number1.length - 1, index2 = number2.length - 1; index1 >= 0 || index2 >= 0; index1-- , index2--) {
+            let char1 = number1.charAt(index1);
+            if (!char1) {
+                char1 = "0";
+            }
+
+            let char2 = number2.charAt(index2);
+            if (!char2) {
+                char2 = "0";
+            }
+
+            const sum = Number(char1) + Number(char2) + carry;
+            if (sum > 9) {
+                carry = 1;
+            }
+            else {
+                carry = 0;
+            }
+
+            result = String(sum).charAt(carry) + result;
         }
 
-        if (res == '0') {
-            return '0';
+        if (carry == 1) {
+            result = "1" + result;
         }
 
-        return res.replace(/^0+/, '');
+        return result;
     }
 }
 

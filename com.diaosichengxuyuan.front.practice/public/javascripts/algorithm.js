@@ -33,7 +33,7 @@ const addTwoNumbers = function (l1, l2) {
         nextNode = nextNode.next;
     }
 
-    const sum = NumberUtil.bigNumberAdd(number1Str, number2Str);
+    const sum = NumberUtil.add(number1Str, number2Str);
     const firstNode = new ListNode();
     nextNode = firstNode;
     for (let index = sum.length - 1; index >= 0; index--) {
@@ -46,8 +46,6 @@ const addTwoNumbers = function (l1, l2) {
         }
     }
 
-    console.log(sum);
-
     return firstNode;
 };
 
@@ -55,6 +53,8 @@ function ListNode(val) {
     this.val = val;
     this.next = null;
 }
+
+
 
 
 const test = function () {
