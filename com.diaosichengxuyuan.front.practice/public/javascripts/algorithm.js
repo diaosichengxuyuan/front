@@ -55,6 +55,37 @@ function ListNode(val) {
 }
 
 
+//给定一个字符串，请你找出其中不含有重复字符的最长子串的长度。
+//输入"pwwkew"，输出3，因为无重复字符的最长子串是"wke"，所以其长度为3
+const lengthOfLongestSubstring = function (s) {
+    if (!s) {
+        return 0;
+    }
+
+    let maxLength = 0;
+    const queue = [];
+
+    for (let index = 0; index < s.length; index++) {
+        const c = s.charAt(index);
+        const cIndex = queue.indexOf(c);
+
+        if (cIndex != -1) {
+            if (queue.length > maxLength) {
+                maxLength = queue.length;
+            }
+            queue.splice(0, cIndex + 1);
+        }
+
+        queue.push(c);
+    }
+
+    if (queue.length > maxLength) {
+        maxLength = queue.length;
+    }
+
+    return maxLength;
+};
+
 
 
 const test = function () {
