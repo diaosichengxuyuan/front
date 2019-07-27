@@ -34,6 +34,14 @@ class NumberUtil {
 
         return result;
     }
+
+    isNumberOfSingleChar = function(c){
+        if(c.match(/^[0-9]$/)){
+            return true;
+        }
+        
+        return false;
+    }
 }
 
 export default new NumberUtil();
