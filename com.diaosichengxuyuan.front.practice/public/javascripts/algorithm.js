@@ -147,6 +147,55 @@ var atoi = function (str) {
     return result;
 };
 
+//给定一个按照升序排列的整数数组nums，和一个目标值target。找出给定目标值在数组中的开始位置和结束位置。
+//你的算法时间复杂度必须是O(log n)级别。如果数组中不存在目标值，返回[-1,-1]。
+const searchRange = function (nums, target) {
+    if (nums == null || nums.length == 0 || target == null) {
+        return [-1, -1];
+    }
+
+    let leftIndex = 0;
+    let rightIndex = nums.length - 1;
+    let validIndex = -1;
+    while (leftIndex <= rightIndex) {
+        const midIndex = Math.ceil((leftIndex + rightIndex) / 2);
+        //只剩最后两个元素时
+        if (midIndex == rightIndex) {
+            if (nums[rightIndex] == target) {
+                validIndex = rightIndex;
+            } else if (nums[leftIndex] == target) {
+                validIndex = leftIndex;
+            }
+            break;
+        }
+
+        const midValue = nums[midIndex];
+        if (midValue > target) {
+            rightIndex = midIndex;
+        } else if (midValue < target) {
+            leftIndex = midIndex;
+        } else {
+            validIndex = midIndex;
+            break;
+        }
+    }
+
+    if (validIndex == -1) {
+        return [-1, -1];
+    }
+
+    leftIndex = validIndex;
+    rightIndex = validIndex;
+
+    while (leftIndex > 0 && nums[leftIndex - 1] == target) {
+        leftIndex--;
+    }
+    while (rightIndex < nums.length - 1 && nums[rightIndex + 1] == target) {
+        rightIndex++;
+    }
+
+    return [leftIndex, rightIndex];
+};
 
 
 const test = function () {
