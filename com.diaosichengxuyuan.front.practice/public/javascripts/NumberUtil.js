@@ -35,12 +35,39 @@ class NumberUtil {
         return result;
     }
 
-    isNumberOfSingleChar = function(c){
-        if(c.match(/^[0-9]$/)){
+    isNumberOfSingleChar = function (c) {
+        if (c.match(/^[0-9]$/)) {
             return true;
         }
-        
+
         return false;
+    }
+
+    //碾转相除法求最大公约数
+    gcd = function (a, b) {
+        if (a <= 0 || b <= 0) {
+            return -1;
+        }
+
+        let max = a;
+        let min = b;
+        if (a < b) {
+            max = b;
+            min = a;
+        }
+
+        let remainder = max % min;
+        while (remainder != 0) {
+            if (min > remainder) {
+                max = min;
+                min = remainder;
+            } else {
+                max = remainder;
+            }
+            remainder = max % min;
+        }
+
+        return min;
     }
 }
 

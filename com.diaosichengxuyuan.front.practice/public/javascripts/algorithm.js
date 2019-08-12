@@ -1,5 +1,6 @@
 import NumberUtil from "./NumberUtil.js";
 import StringUtil from "./StringUtil.js";
+import SortUtil from "./SortUtil.js";
 
 //给定一个整数数组nums和一个目标值target，请你在该数组中找出和为目标值的那两个整数，并返回他们的数组下标。
 //你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。
@@ -324,7 +325,134 @@ var minPathSum = function (grid) {
     return temp[temp.length - 1];
 };
 
+//给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+//你的算法应该具有线性时间复杂度，不使用额外空间。
+var singleNumber = function (nums) {
+    let result = 0;
+    for (let index in nums) {
+        result ^= nums[index];
+    }
+    return result;
+};
+
+//你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是
+//相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+var rob = function (nums) {
+    let maxValue = 0;
+    let preMaxVaule = 0;
+    for (let index in nums) {
+        const temp = maxValue;
+        maxValue = Math.max(maxValue, preMaxVaule + nums[index]);
+        preMaxVaule = temp;
+    }
+
+    return maxValue;
+};
+
+//编写一个函数，其作用是将输入的字符串反转过来。输入字符串以字符数组char[]的形式给出。
+//不要给另外的数组分配额外的空间，你必须原地修改输入数组、使用O(1)的额外空间解决这一问题。
+//你可以假设数组中的所有字符都是ASCII码表中的可打印字符。
+var reverseString = function (s) {
+    let left = 0;
+    let right = s.length - 1;
+    while (left < right) {
+        const temp = s[left];
+        s[left] = s[right];
+        s[right] = temp;
+        left++;
+        right--;
+    }
+
+    return s;
+};
+
+//给定一个非空的整数数组，返回其中出现频率前k高的元素。
+var topKFrequent = function (nums, k) {
+    const map = new Map();
+    for (let index in nums) {
+        const val = nums[index];
+        let count = map.get(val);
+        if (count == null) {
+            map.set(val, 1);
+        } else {
+            map.set(val, ++count);
+        }
+    }
+
+    const data = [];
+    map.forEach(function (value, key) {
+        data.push({
+            key: key,
+            value: value
+        });
+    });
+
+    build(data);
+
+    const result = [];
+    for (let i = data.length - 1; i > data.length - 1 - k; i--) {
+        result.push(data[0].key);
+        exchange(data, i, 0);
+        adjust(data, 0, i);
+    }
+
+    return result;
+};
+
+
+function build(data) {
+    const length = data.length;
+    //第一个非叶子节点
+    const firstNotLeaf = Math.floor(length / 2) - 1;
+
+    //从第一个非叶子节点向上调整
+    for (let i = firstNotLeaf; i >= 0; i--) {
+        adjust(data, i, length);
+    }
+}
+
+function exchange(data, i, j) {
+    const temp = data[j];
+    data[j] = data[i];
+    data[i] = temp;
+}
+
+function adjust(data, i, length) {
+    const left = 2 * i + 1;
+    const right = 2 * i + 2;
+
+    let max = i;
+    if (left <= length - 1 && data[left].value > data[max].value) {
+        max = left;
+    }
+    if (right <= length - 1 && data[right].value > data[max].value) {
+        max = right;
+    }
+
+    if (max != i) {
+        exchange(data, i, max);
+        adjust(data, max, length);
+    }
+}
+
+//有两个容量分别为x升和y升的水壶以及无限多的水。请判断能否通过使用这两个水壶，从而可以得到恰好z升的水？
+//如果可以，最后请用以上水壶中的一或两个来盛放取得的z升水。
+//你允许：装满任意一个水壶；清空任意一个水壶；从一个水壶向另外一个水壶倒水，直到装满或者倒空。
+var canMeasureWater = function (x, y, z) {
+    if (z > x + y) {
+        return false;
+    }
+
+    const gcd = NumberUtil.gcd(x, y);
+    if (z % gcd == 0) {
+        return true;
+    }
+
+    return false;
+};
+
 const test = function () {
+    return canMeasureWater(2,6,5);
 }
 
 const leecodeElement = document.getElementsByClassName("leecode")[0];
