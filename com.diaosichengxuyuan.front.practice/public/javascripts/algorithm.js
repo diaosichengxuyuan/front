@@ -581,6 +581,66 @@ var frequencySort = function (s) {
     return result;
 };
 
+//513
+//给定一个二叉树，在树的最后一行找到最左边的值。
+//迭代层序遍历或递归记录最大深度
+let maxDepth = 0;
+let bottomLeftValue = 0;
+var findBottomLeftValue = function (root) {
+    innerFindBottomLeftValue(root, 1);
+    return bottomLeftValue;
+};
+
+function innerFindBottomLeftValue(element, depth) {
+    if (element == null) {
+        return;
+    }
+
+    if (depth > maxDepth) {
+        maxDepth = depth;
+        bottomLeftValue = element.val;
+    }
+
+    innerFindBottomLeftValue(element.left, depth + 1);
+    innerFindBottomLeftValue(element.right, depth + 1);
+}
+
+//540
+//给定一个只包含整数的有序数组，每个元素都会出现两次，唯有一个数只会出现一次，找出这个数。
+//输入:[1,1,2,3,3,4,4,8,8]  输出:2
+//二分查找，不过好像跟升序没什么关系，用顺序查找或者按位异或应该也可以。
+var singleNonDuplicate = function (nums) {
+    if (nums == null || nums.length == 0) {
+        return null;
+    }
+
+    let leftIndex = 0;
+    let rightIndex = nums.length - 1;
+
+    while (leftIndex < rightIndex) {
+        const midIndex = (rightIndex + leftIndex) / 2;
+        if (midIndex % 2 == 0) {
+            if (nums[midIndex - 1] == nums[midIndex]) {
+                rightIndex = midIndex - 2;
+            } else if (nums[midIndex + 1] == nums[midIndex]) {
+                leftIndex = midIndex + 2;
+            } else {
+                return nums[midIndex];
+            }
+        } else {
+            if (nums[midIndex - 1] == nums[midIndex]) {
+                leftIndex = midIndex + 1;
+            } else if (nums[midIndex + 1] == nums[midIndex]) {
+                rightIndex = midIndex - 1;
+            } else {
+                return nums[midIndex];
+            }
+        }
+    }
+
+    return nums[leftIndex];
+};
+
 const test = function () {
 }
 
