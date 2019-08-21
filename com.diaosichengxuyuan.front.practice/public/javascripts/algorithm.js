@@ -641,6 +641,153 @@ var singleNonDuplicate = function (nums) {
     return nums[leftIndex];
 };
 
+//594
+//和谐数组是指一个数组里元素的最大值和最小值之间的差别正好是1。
+//现在，给定一个整数数组，你需要在所有可能的子序列中找到最长的和谐子序列的长度。
+//输入:[1,3,2,2,5,2,3,7]  输出:5  原因:最长的和谐数组是[3,2,2,2,3]
+var findLHS = function (nums) {
+    const map = new Map();
+    for (let index in nums) {
+        const key = nums[index];
+        let value = map.get(key);
+        if (value == null) {
+            map.set(nums[index], 1);
+        } else {
+            map.set(nums[index], ++value);
+        }
+    }
+
+    let maxLength = 0;
+    map.forEach(function (value, key, originalMap) {
+        if (!originalMap.has(key + 1)) {
+            return;
+        }
+
+        const temp = value + originalMap.get(key + 1);
+        if (temp > maxLength) {
+            maxLength = temp;
+        }
+    });
+
+    return maxLength;
+};
+
+//645
+//集合S包含从1到n的整数。不幸的是，因为数据错误，导致集合里面某一个元素复制了成了集合里面的另外一个元素的值，
+//导致集合丢失了一个整数并且有一个元素重复。给定一个数组nums代表了集合S发生错误后的结果。你的任务是首先寻找
+//到重复出现的整数，再找到丢失的整数，将它们以数组的形式返回。
+//输入:nums = [1,2,2,4]  输出:[2,3]
+//给定数组的长度范围是[2, 10000]。给定的数组是无序的。
+var findErrorNums = function (nums) {
+    const result = [];
+    let sum = 0;
+    const set = new Set();
+    for (let index in nums) {
+        const value = nums[index];
+        if (set.has(value)) {
+            result.push(value);
+        } else {
+            set.add(value);
+            sum += value;
+        }
+    }
+
+    result.push((1 + nums.length) * nums.length / 2 - sum);
+
+    return result;
+};
+
+//724
+//给定一个整数类型的数组nums，请编写一个能够返回数组“中心索引”的方法。
+//我们是这样定义数组中心索引的：数组中心索引的左侧所有元素相加的和等于右侧所有元素相加的和。
+//如果数组不存在中心索引，那么我们应该返回 -1。如果数组有多个中心索引，那么我们应该返回最靠近左边的那一个。
+//输入:nums = [1, 7, 3, 6, 5, 6] 输出:3
+//解释:索引3(nums[3]=6)的左侧数之和(1+7+3=11)，与右侧数之和(5+6=11)相等。同时,3也是第一个符合要求的中心索引。
+var pivotIndex = function (nums) {
+    if (nums == null || nums.length == 0) {
+        return -1;
+    }
+
+    let sum = 0;
+    for (let index in nums) {
+        sum += nums[index];
+    }
+
+    let leftSum = 0;
+    for (let index in nums) {
+        if (sum - nums[index] == 2 * leftSum) {
+            return index;
+        }
+        leftSum += nums[index];
+    }
+
+    return -1;
+};
+
+//796
+//给定两个字符串，A和B。
+//A的旋转操作就是将A最左边的字符移动到最右边。例如，若A='abcde'，在移动一次之后结果就是'bcdea'。如果在若干次旋转操作之后，A能变成B，那么返回True。
+//输入:A='abcde',B='cdeab' 输出:true
+var rotateString = function (A, B) {
+    if (A == null || B == null) {
+        return false;
+    }
+
+    if (typeof (A) != "string" || typeof (B) != "string") {
+        return false;
+    }
+
+    if (A.length != B.length) {
+        return false;
+    }
+
+    return (A + A).indexOf(B) != -1;
+};
+
+//791
+//字符串S和T只包含小写字符。在S中，所有字符只会出现一次。S已经根据某种规则进行了排序。我们要根据S中的字符顺序对T进行排序。
+//更具体地说，如果S中x在y之前出现，那么返回的字符串中x也应出现在y之前。返回任意一种符合条件的字符串T。
+//输入:S="cba" T="abcd"  输出:"cbad"
+//解释:S中出现了字符"a","b","c",所以"a","b","c"的顺序应该是"c","b","a" 
+//由于"d"没有在S中出现,它可以放在T的任意位置."dcba","cdba","cbda"都是合法的输出。
+var customSortString = function (S, T) {
+    //字符和索引下标的对应关系
+    const map = new Map();
+    for (let i = 0; i < S.length; i++) {
+        map.set(S.charAt(i), i);
+    }
+
+    let index = S.length;
+    const array = [];
+    for (let i = 0; i < T.length; i++) {
+        const c = T.charAt(i);
+        let arrayIndex = map.get(c);
+        if (arrayIndex == null) {
+            arrayIndex = index;
+            map.set(c, index++);
+        }
+
+        const value = array[arrayIndex];
+        if (value == null) {
+            array[arrayIndex] = { char: c, count: 1 };
+        } else {
+            array[arrayIndex].count += 1;
+        }
+    }
+
+    let result = "";
+    for (let i in array) {
+        const c = array[i].char;
+        const count = array[i].count;
+        for (let j = 0; j < count; j++) {
+            result += c;
+        }
+    }
+
+    return result;
+};
+
+
 const test = function () {
 }
 
